@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+{% block title %}Klienci{% endblock %}
+{% block body %}
+    <h1>
+        Lista klientów sklepu
+    </h1>
+
+    <div>
+        <h2>Klienci</h2>
+
+        <table>
+            {% for customer in customers %}
+            <tr>
+                <th>e-mail:</th>
+                <td>{{ customer.email }}</td>
+            </tr>
+            <tr>
+                <th>Imię:</th>
+                <td>{{ customer.firstName }}</td>
+            </tr>
+            <tr>
+                <th>Nazwisko:</th>
+                <td>{{ customer.lastName|upper|lower|title }}</td>
+            </tr>
+            <tr>
+                <th>Dołączył:</th>
+                <td>{{ customer.joinAt|date("Y-m-d") }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}
