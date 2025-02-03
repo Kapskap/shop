@@ -13,13 +13,7 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         CustomerFactory::createMany(20);
-//            [
-//            'name' => 'USS LeafyCruiser (NCC-0001)',
-//            'class' => 'Garden',
-//            'captain' => 'Jean-Luc Pickles',
-//            'status' => StarshipStatusEnum::IN_PROGRESS,
-//            'arrivedAt' => new \DateTimeImmutable('-1 day'),
-//        ]);
+
 //        Customer::createMany(20);
 //        $customer1 = new Customer();
 //        $customer1->setEmail('test@example.com');

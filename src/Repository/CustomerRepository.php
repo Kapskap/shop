@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\Customer;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
+use Pagerfanta\Pagerfanta;
 
 /**
  * @extends ServiceEntityRepository<Customer>
@@ -16,6 +18,14 @@ class CustomerRepository extends ServiceEntityRepository
         parent::__construct($registry, Customer::class);
     }
 
+    public function findAllPage(): Pagerfanta
+    {
+        $query = $this->createQueryBuilder('c')
+            ->orderBy('c.joinAt', 'DESC')
+            ->getQuery()
+        ;
+        return new Pagerfanta(new QueryAdapter($query));
+    }
     //    /**
     //     * @return Customer[] Returns an array of Customer objects
     //     */
