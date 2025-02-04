@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+    | show {{customer.id}}
+{% endblock %}
+{% block body %}
+    <h2>Oto szczegółowe informacje o wybranym kontakcie:</h2>
+
+    <h4>Imię: {{customer.firstname}} Nazwisko: {{customer.lastname}}</h4>
+
+    <h4>Nr telefonu: {{ customer.phoneNumber }}
+    </h4>
+    <h4>Klient został dodany: {{ customer.joinAt|date("Y-m-d") }}</h4>
+
+
+{% endblock %}
