@@ -11,7 +11,7 @@
             </div>
             <div class="space-y-5">
                 {% for customer in customers %}
-                <a href="{{ path('show_customer', {id: customer.id }) }}">
+                <a href="{{ path('customer_get', {id: customer.id }) }}">
                     <strong> {{ customer.id }} </strong>
                 </a></div><br>
                     <div class="bg-[#16202A] rounded-2xl pl-5 py-5 pr-11 flex flex-col min-[1174px]:flex-row min-[1174px]:justify-between">

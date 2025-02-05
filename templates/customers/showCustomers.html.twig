@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+{% block title %}Klienci{% endblock %}
+{% block body %}
+    <main class="flex flex-col lg:flex-row">
+        <div class="px-12 pt-10 w-full">
+            <h1 class="text-4xl font-semibold mb-3">
+                Baza danych klientów
+            </h1>
+            <div class="text-slate-400 mb-4">
+                Znaleziono: {{ customers.nbResults }} klientów. (Strona {{ customers.currentPage }} z {{ customers.nbPages }})
+            </div>
+            <div class="space-y-5">
+                {% for customer in customers %}
+                <a href="{{ path('customer_get', {id: customer.id }) }}">
+                    <strong> {{ customer.id }} </strong>
+                </a></div><br>
+            <div class="bg-[#16202A] rounded-2xl pl-5 py-5 pr-11 flex flex-col min-[1174px]:flex-row min-[1174px]:justify-between">
+                <div class="flex justify-center min-[1174px]:justify-start mt-2 min-[1174px]:mt-0 shrink-0">
+                    <div class="border-r border-white/20 pr-8">
+                        <p class="text-slate-400 text-xs">Imię: <b>{{ customer.firstName }}</b></p>
+                    </div>
+                    <div class="pl-8 w-[100px]">
+                        <p class="text-slate-400 text-xs">Nazwisko: <b>{{ customer.lastName }}</b></p>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-center min-[1174px]:justify-start">
+                <div class="ml-5">
+                    <div class="rounded-2xl py-1 px-3 flex justify-center w-32 items-center bg-amber-400/10">
+                        <div class="rounded-full h-2 w-2 bg-amber-400 blur-[1px] mr-2"></div>
+                        Telefon: {{ customer.phoneNumber }}
+                    </div>
+                    <h4 class="text-[22px] pt-1 font-semibold">
+                        {#  <a
+                                            class="hover:text-slate-200"
+                                            href="{{ path('customer_info', { id: customer.id }) }}"
+                                    >{{ customer.email }}</a>#}
+                    </h4>
+                    <div>
+                        Jest z nami od: {{ customer.joinAt|date("Y-m-d") }}
+                    </div>
+                    <div>
+                        <hr>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% if customers.haveToPaginate %}
+            <div class="flex justify-around mt-3 underline font-semibold">
+                {% if customers.hasPreviousPage %}
+                    <a href="{{ path('app_homepage', {page: customers.getPreviousPage}) }}">&lt; Poprzednia</a>
+                {% endif %}
+                {% if customers.hasNextPage %}
+                    <a href="{{ path('app_homepage', {page: customers.getNextPage}) }}">Następna &gt;</a>
+                {% endif %}
+            </div>
+        {% endif %}
+        <p class="text-lg mt-5 text-center md:text-left">
+            Nadal szukasz ?
+            <a href="#" class="underline font-semibold">Przeglądaj {{ customers|length }}  klientów !</a>
+        </p>
+        </div>
+    </main>
+{% endblock %}

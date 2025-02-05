@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation;
 
 class CustomerController extends AbstractController
 {
-    #[Route('/customer/{id}', name: 'show_customer')]
+    #[Route('/customer/{id<\d+>}', name: 'show_customer')]
     public function getCustomer($id, EntityManagerInterface $entityManager): Response
     {
         $customer = $entityManager->getRepository(Customer::class)->find($id);
