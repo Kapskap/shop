@@ -19,11 +19,10 @@ class HomeController extends AbstractController
         $customers = $customerRepository->findAllPage();
         $customers->setMaxPerPage(5);
         $customers->setCurrentPage($request->query->get('page', 1));
-//        $customer = $customerRepository->findBy(['id' => 1]);
+
 
         return $this->render('main/homepage.html.twig', [
             'customers' => $customers,
-//            'customer' => $customer,
         ]);
     }
 }
