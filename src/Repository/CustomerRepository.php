@@ -18,7 +18,7 @@ class CustomerRepository extends ServiceEntityRepository
         parent::__construct($registry, Customer::class);
     }
 
-    public function findAllPage(): Pagerfanta
+    public function findAllCustomerPages(): Pagerfanta
     {
         $query = $this->createQueryBuilder('c')
             ->orderBy('c.joinAt', 'DESC')

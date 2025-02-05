@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Repository\CustomerRepository;
+use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,17 +12,17 @@ class HomeController extends AbstractController
 {
     #[Route('/', name: 'app_homepage')]
     public function homepage(
-        customerRepository $customerRepository,
+        productRepository $productRepository,
         Request $request,
     ): Response
     {
-        $customers = $customerRepository->findAllPage();
-        $customers->setMaxPerPage(5);
-        $customers->setCurrentPage($request->query->get('page', 1));
+        $products = $productRepository->findAllProductPages();
+        $products->setMaxPerPage(5);
+        $products->setCurrentPage($request->query->get('page', 1));
 
 
         return $this->render('main/homepage.html.twig', [
-            'customers' => $customers,
+            'products' => $products,
         ]);
     }
 }
