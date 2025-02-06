@@ -13,6 +13,22 @@
         {% endblock %}
     </head>
     <body>
+        <header>
+            <h1>Sklep Internetowy</h1>
+            <nav>
+                <ul>
+                    <li><a href="{{ path('app_homepage') }}">Strona Główna</a></li>
+                    <li><a href="#">Produkty</a></li>
+                    <li><a href="#">Kontakt</a></li>
+                    <li><a href="#">Koszyk</a></li>
+                </ul>
+            </nav>
+        </header>
+
         {% block body %}{% endblock %}
+
+        <footer>
+            <p>&copy; 2025 Prosty sklep internetowy stworzony na bazie frameworka Symfony.</p>
+        </footer>
     </body>
 </html>

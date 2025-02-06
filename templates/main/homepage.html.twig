@@ -1,62 +1,26 @@
 {% extends 'base.html.twig' %}
-{% block title %}Klienci{% endblock %}
+{% block title %}Produkty{% endblock %}
 {% block body %}
-    <main class="flex flex-col lg:flex-row">
-        <div class="px-12 pt-10 w-full">
-            <h1 class="text-4xl font-semibold mb-3">
-                Lista produktów
-            </h1>
-            <div class="text-slate-400 mb-4">
-                Znaleziono: {{ products.nbResults }} produktów. (Strona {{ products.currentPage }} z {{ products.nbPages }})
-            </div>
-            <div>
-                <hr>
-            </div>
-            <div class="space-y-5">
-                {% for product in products %}
-                {#
-                <a href="{{ path('customer_get', {id: customer.id }) }}">
-                    <strong> {{ product.id }} </strong>
-                </a></div><br>
-                #}
-                    <div class="bg-[#16202A] rounded-2xl pl-5 py-5 pr-11 flex flex-col min-[1174px]:flex-row min-[1174px]:justify-between">
-                        <div class="flex justify-center min-[1174px]:justify-start mt-2 min-[1174px]:mt-0 shrink-0">
-                            <div class="border-r border-white/20 pr-8">
-                                <p class="text-slate-400 text-xs">Nazwa: <b>{{ product.name }}</b></p>
-                            </div>
-                            <div class="pl-8 w-[100px]">
-                                <p class="text-slate-400 text-xs">Kategoria: <b>{{ product.category }}</b></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex justify-center min-[1174px]:justify-start">
-                        <div class="ml-5">
-                            <div class="rounded-2xl py-1 px-3 flex justify-center w-32 items-center bg-amber-400/10">
-                                <div class="rounded-full h-2 w-2 bg-amber-400 blur-[1px] mr-2"></div>
-                                Cena: {{ product.sellingPrice }}
-                            </div>
-
-                            <div>
-                                <hr>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-            {% if products.haveToPaginate %}
-                <div class="flex justify-around mt-3 underline font-semibold">
-                    {% if products.hasPreviousPage %}
-                        <a href="{{ path('app_homepage', {page: products.getPreviousPage}) }}">&lt; Poprzednia</a>
-                    {% endif %}
-                    {% if products.hasNextPage %}
-                        <a href="{{ path('app_homepage', {page: products.getNextPage}) }}">Następna &gt;</a>
-                    {% endif %}
-                </div>
-            {% endif %}
-            <p class="text-lg mt-5 text-center md:text-left">
-                Nadal szukasz ?
-                <a href="#" class="underline font-semibold">Przeglądaj {{ products|length }}  !</a>
-            </p>
-        </div>
+    <main>
+        <section class="sort">
+            <label for="sort">Sortuj według:</label>
+            <select id="sort">
+                <option value="price-asc">Cena rosnąco</option>
+                <option value="price-desc">Cena malejąco</option>
+                <option value="name-asc">Nazwa A-Z</option>
+                <option value="name-desc">Nazwa Z-A</option>
+            </select>
+        </section>
+        <section class="products">
+            {% for product in products %}
+                <article class="product">
+                    <img src="product.jpg" alt="{{ product.name }}">
+                    <h2>{{ product.name }}</h2>
+                    <p>{{ product.category }}</p>
+                    <span class="price">{{ product.sellingPrice/100 }} PLN</span>
+                    <button>Dodaj do koszyka</button>
+                </article>
+            {% endfor %}
+        </section>
     </main>
 {% endblock %}

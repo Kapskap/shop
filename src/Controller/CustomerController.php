@@ -18,12 +18,12 @@ class CustomerController extends AbstractController
         Request $request,
     ): Response
     {
-        $customers = $customerRepository->findAllPage();
+        $customers = $customerRepository->findAllCustomerPages();
         $customers->setMaxPerPage(5);
         $customers->setCurrentPage($request->query->get('page', 1));
 
 
-        return $this->render('main/homepage.html.twig', [
+        return $this->render('customers/showCustomers.html.twig', [
             'customers' => $customers,
         ]);
     }
