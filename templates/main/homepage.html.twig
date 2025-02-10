@@ -14,9 +14,11 @@
         <section class="products">
             {% for product in products %}
                 <article class="product">
-                    <img src="product.jpg" alt="{{ product.name }}">
-                    <h2>{{ product.name }}</h2>
-                    <p>{{ product.category }}</p>
+                    <a href="{{ path('product_get', { id: product.id }) }}">
+                        <img src="product.jpg" alt="{{ product.name }}">
+                        <h2>{{ product.name }}</h2>
+                        <p>{{ product.category }}</p>
+                    </a>
                     <span class="price">{{ product.sellingPrice/100 }} PLN</span>
                     <button>Dodaj do koszyka</button>
                 </article>
