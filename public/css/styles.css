@@ -58,7 +58,7 @@ nav ul li a:hover {
     margin: 10px 0;
 }
 
-button {
+.button_basket {
     background: #28a745;
     color: white;
     border: none;
@@ -67,7 +67,7 @@ button {
     border-radius: 5px;
 }
 
-button:hover {
+.button_basket:hover {
     background: #218838;
 }
 

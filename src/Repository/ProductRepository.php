@@ -26,6 +26,40 @@ class ProductRepository extends ServiceEntityRepository
         return new Pagerfanta(new QueryAdapter($query));
     }
 
+    public function findByPriseAsc(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->orderBy('p.sellingPrice', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+    public function findByPriseDesc(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->orderBy('p.sellingPrice', 'DESC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findByNameAsc(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->orderBy('p.name', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findByNameDesc(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->orderBy('p.name', 'DESC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
     //    /**
     //     * @return Product[] Returns an array of Product objects
     //     */

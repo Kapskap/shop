@@ -3,6 +3,10 @@
 {% block body %}
     <main>
         <section class="sort">
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+{#
             <label for="sort">Sortuj według:</label>
             <select id="sort">
                 <option value="price-asc">Cena rosnąco</option>
@@ -10,6 +14,7 @@
                 <option value="name-asc">Nazwa A-Z</option>
                 <option value="name-desc">Nazwa Z-A</option>
             </select>
+#}
         </section>
         <section class="products">
             {% for product in products %}
@@ -20,7 +25,7 @@
                         <p>{{ product.category }}</p>
                     </a>
                     <span class="price">{{ product.sellingPrice/100 }} PLN</span>
-                    <button>Dodaj do koszyka</button>
+                    <button class="button_basket">Dodaj do koszyka</button>
                 </article>
             {% endfor %}
         </section>
