@@ -9,24 +9,29 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 
-class SortFormType extends AbstractType
+class SortAndSearchFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $sort = array(
             'Domyślnie' => null,
-            'Cena rosnąco' =>'price-asc',
-            'Cena malejąco' =>'price-desc',
+            'Cena rosnąco' =>'sellingPrice-asc',
+            'Cena malejąco' =>'sellingPrice-desc',
             'Nazwa A-Z' => 'name-asc',
             'Nazwa Z-A' => 'name-desc'
         );
 
         $builder
-            ->add('Sortuj:', ChoiceType::class, [
+            ->add('sort', ChoiceType::class, [
+                'label' => 'Sortuj według: ',
                 'choices'  => [$sort],
             ])
+            ->add('search', TextType::class, [
+                'label' => 'Szukaj: ',
+                'required' => false,
+            ])
             ->add('submit', SubmitType::class, [
-                'label' => 'Szukaj'
+                'label' => 'Zatwierdź'
             ]);
         $builder->setMethod('GET');
     }

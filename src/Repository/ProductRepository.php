@@ -8,6 +8,8 @@ use Doctrine\Persistence\ManagerRegistry;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 
+use Doctrine\ORM\Query\ResultSetMapping;
+
 /**
  * @extends ServiceEntityRepository<Product>
  */
@@ -60,20 +62,61 @@ class ProductRepository extends ServiceEntityRepository
             ->getResult()
             ;
     }
-    //    /**
-    //     * @return Product[] Returns an array of Product objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('p.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+
+    public function findBySearchField($search): array
+    {
+            return $this->createQueryBuilder('p')
+                ->andWhere('p.name = :name')
+                ->setParameter('name', $search)
+                ->orderBy('p.sellingPrice', 'ASC')
+                ->getQuery()
+                ->getResult()
+            ;
+    }
+
+    public function findAllSearchedAndSort($sort, $search): array
+    {
+        $entityManager = $this->getEntityManager();
+
+        if ($sort != NULL){
+            $sort = explode('-',$sort);
+            $orderBy = " ORDER BY p.$sort[0] $sort[1]";
+        }
+        else{
+            $orderBy = "";
+        }
+
+        if ($search != NULL){
+            $search="%".$search."%";
+        }
+        else {
+            $search = "%";
+        }
+
+        $sql = 'SELECT p FROM App\Entity\Product p 
+                WHERE p.name LIKE :search
+                OR p.category LIKE :search
+                OR p.description LIKE :search
+                OR p.sellingPrice LIKE :search'
+            .$orderBy;
+
+        $query = $entityManager->createQuery($sql)->setParameter('search', $search);
+
+        return $query->getResult();
+
+    }
+
+    //nativeQuery
+    public function queryTest($search): array
+    {
+        $em = $this->getEntityManager();
+        $rsm = new ResultSetMapping();
+        $query = $em->createNativeQuery('SELECT * FROM product p ORDER BY p.selling_price ASC', $rsm);
+//        $query->setParameter(1, $search);
+        return $query->getResult();
+
+    }
+
 
     //    public function findOneBySomeField($value): ?Product
     //    {
