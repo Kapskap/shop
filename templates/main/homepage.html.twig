@@ -6,15 +6,6 @@
             {{ form_start(form) }}
             {{ form_widget(form) }}
             {{ form_end(form) }}
-{#
-            <label for="sort">Sortuj według:</label>
-            <select id="sort">
-                <option value="price-asc">Cena rosnąco</option>
-                <option value="price-desc">Cena malejąco</option>
-                <option value="name-asc">Nazwa A-Z</option>
-                <option value="name-desc">Nazwa Z-A</option>
-            </select>
-#}
         </section>
         <section class="products">
             {% for product in products %}
@@ -22,6 +13,8 @@
                     <a href="{{ path('product_get', { id: product.id }) }}">
                         <img src="product.jpg" alt="{{ product.name }}">
                         <h2>{{ product.name }}</h2>
+                    </a>
+                    <a href="{{ path('category_get', { category: product.category }) }}">
                         <p>{{ product.category }}</p>
                     </a>
                     <span class="price">{{ product.sellingPrice/100 }} PLN</span>
