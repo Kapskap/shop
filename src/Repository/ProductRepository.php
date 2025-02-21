@@ -111,8 +111,10 @@ class ProductRepository extends ServiceEntityRepository
     {
         $em = $this->getEntityManager();
         $rsm = new ResultSetMapping();
-        $query = $em->createNativeQuery('SELECT * FROM product p ORDER BY p.selling_price ASC', $rsm);
-//        $query->setParameter(1, $search);
+        $query = $em->createNativeQuery('SELECT * FROM product p WHERE category = ? ORDER BY p.selling_price ASC', $rsm);
+
+        $query->setParameter(1, 'Drukarka');
+        //mapowanie
         return $query->getResult();
 
     }
