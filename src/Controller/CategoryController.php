@@ -21,7 +21,17 @@ class CategoryController extends AbstractController
         $form = $this->createForm(SortAndSearchFormType::class);
         $form->handleRequest($request);
 
-        $products = $entityManager->getRepository(Product::class)->findBy(['category' => $category]);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $sort = $form->get('sort')->getData();
+            $search = $form->get('search')->getData();
+
+            $products = $entityManager->getRepository(Product::class)->findAllSearchedAndSort($sort, $search, $category);
+
+        }
+        else {
+            $products = $entityManager->getRepository(Product::class)->findBy(['category' => $category]);
+        }
+        
         if ($category == NULL) {
             throw $this->createNotFoundException('Nie znaleziono kategorii o nazwie: ' . $category);
         }

@@ -24,8 +24,9 @@ class HomeController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $sort = $form->get('sort')->getData();
             $search = $form->get('search')->getData();
+            $category = '%';
 
-            $products = $entityManager->getRepository(Product::class)->findAllSearchedAndSort($sort, $search);
+            $products = $entityManager->getRepository(Product::class)->findAllSearchedAndSort($sort, $search, $category);
 
 //            $products3 = $entityManager->getRepository(Product::class)->queryTest($search);
 //            dd($products, $products3);

@@ -7,6 +7,8 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Query\Parameter;
 
 use Doctrine\ORM\Query\ResultSetMapping;
 
@@ -74,7 +76,7 @@ class ProductRepository extends ServiceEntityRepository
             ;
     }
 
-    public function findAllSearchedAndSort($sort, $search): array
+    public function findAllSearchedAndSort($sort, $search, $category): array
     {
         $entityManager = $this->getEntityManager();
 
@@ -94,13 +96,19 @@ class ProductRepository extends ServiceEntityRepository
         }
 
         $sql = 'SELECT p FROM App\Entity\Product p 
-                WHERE p.name LIKE :search
-                OR p.category LIKE :search
+                WHERE (p.name LIKE :search
                 OR p.description LIKE :search
-                OR p.sellingPrice LIKE :search'
+                OR p.sellingPrice LIKE :search)
+                AND p.category LIKE :category'
             .$orderBy;
 
-        $query = $entityManager->createQuery($sql)->setParameter('search', $search);
+        $query = $entityManager->createQuery($sql)->setParameters(
+            new ArrayCollection([
+                new Parameter('search', $search),
+                new Parameter('category', $category)
+            ])
+        );
+//            'search', $search)->setParameter( 'category', $category));
 
         return $query->getResult();
 
