@@ -13,8 +13,6 @@
                     <a href="{{ path('product_get', { id: product.id }) }}">
                         <img src="product.jpg" alt="{{ product.name }}">
                         <h2>{{ product.name }}</h2>
-                    </a>
-                    <a href="{{ path('category_get', { category: product.category }) }}">
                         <p>{{ product.category }}</p>
                     </a>
                     <span class="price">{{ product.sellingPrice/100 }} PLN</span>

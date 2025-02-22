@@ -8,10 +8,20 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use App\Repository\ProductRepository;
+use App\Service\ProductService;
 
 
 class SortAndSearchFormType extends AbstractType
 {
+    public function __construct(
+        private ProductRepository $productRepository,
+        private ProductService $productService
+    )
+    {
+        $this->ProductRepository = $productRepository;
+    }
+
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
@@ -31,10 +41,16 @@ class SortAndSearchFormType extends AbstractType
             'Nazwa Z-A' => 'name-desc'
         );
 
+        $category = array('Wszystko' => '%') + $this->productService->getProductCategory();
+
         $builder
             ->add('sort', ChoiceType::class, [
                 'label' => 'Sortuj według: ',
                 'choices'  => [$sort],
+            ])
+            ->add('category', ChoiceType::class, [
+                'label' => 'Kategoria: ',
+                'choices'  => [$category],
             ])
             ->add('search', TextType::class, [
                 'label' => 'Szukaj: ',

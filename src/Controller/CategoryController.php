@@ -24,14 +24,14 @@ class CategoryController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $sort = $form->get('sort')->getData();
             $search = $form->get('search')->getData();
+            $category = $form->get('category')->getData();
 
             $products = $entityManager->getRepository(Product::class)->findAllSearchedAndSort($sort, $search, $category);
-
         }
         else {
             $products = $entityManager->getRepository(Product::class)->findBy(['category' => $category]);
         }
-        
+
         if ($category == NULL) {
             throw $this->createNotFoundException('Nie znaleziono kategorii o nazwie: ' . $category);
         }
