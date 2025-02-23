@@ -2,21 +2,18 @@
 {% block title %}Produkty{% endblock %}
 {% block body %}
     <main>
-        <section class="sort">
-            {{ form_start(form) }}
-            {{ form_widget(form) }}
-            {{ form_end(form) }}
-        </section>
-        <section class="products">
-            {% for product in products %}
-                <article class="product">
-                    <a href="{{ path('product_get', { id: product.id }) }}">
-                        <img src="product.jpg" alt="{{ product.name }}">
-                        <h2>{{ product.name }}</h2>
-                        <p>{{ product.category }}</p>
-                    </a>
-                    <span class="price">{{ product.sellingPrice/100 }} PLN</span>
-                    <button class="button_basket">Dodaj do koszyka</button>
+        <section class="news">
+            <img src="logo.jpg" alt="logo">
+            <h1>Witamy w naszym sklepie online</h1>
+            <h2>Tu każdy znajdzie coś dla siebie.</h2>
+            <a href="{{ path('products_show') }}">
+                <p>Przejdź do przeglądania produktów</p>
+            </a>
+            {% for new in news %}
+                <article class="news-item">
+                    <p class="news-title">{{ new }}</p>
+                    <p class="news-date">Dodano dnia: 2025-02-23</p>
+                    <p>{{ new }}</p>
                 </article>
             {% endfor %}
         </section>

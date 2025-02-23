@@ -18,27 +18,11 @@ class HomeController extends AbstractController
         Request $request
     ): Response
     {
-        $form = $this->createForm(SortAndSearchFormType::class);
-        $form->handleRequest($request);
+        $news = array("wpis1"=>"Promocja", "wpis2"=>"Nowy produkt");
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $sort = $form->get('sort')->getData();
-            $search = $form->get('search')->getData();
-            $category = $form->get('category')->getData();
-
-            $products = $entityManager->getRepository(Product::class)->findAllSearchedAndSort($sort, $search, $category);
-
-//            $products3 = $entityManager->getRepository(Product::class)->queryTest($search);
-//            dd($products, $products3);
-        }
-        else {
-            $repository = $entityManager->getRepository(Product::class);
-            $products = $repository->findAll();
-        }
 
         return $this->render('main/homepage.html.twig', [
-            'products' => $products,
-            'form' => $form->createView(),
+            'news' => $news,
         ]);
     }
 }
