@@ -2,11 +2,13 @@
 {% block title %}Produkty{% endblock %}
 {% block body %}
     <main>
-        <section class="sort">
-            {{ form_start(form) }}
-            {{ form_widget(form) }}
-            {{ form_end(form) }}
-        </section>
+{#
+            {{ render(controller(
+                'App\\Controller\\SearchProductsController::SortAndSearch', {}
+            )) }}
+#}
+        {{ include('form/_SortAndSearch.html.twig') }}
+
         <section class="products">
             {% for product in products %}
                 <article class="product">

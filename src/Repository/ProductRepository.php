@@ -108,14 +108,13 @@ class ProductRepository extends ServiceEntityRepository
                 new Parameter('category', $category)
             ])
         );
-//            'search', $search)->setParameter( 'category', $category));
 
         return $query->getResult();
 
     }
 
     //nativeQuery
-    public function queryTest($search): array
+    public function nativeTest($category): array
     {
         $em = $this->getEntityManager();
         $rsm = new ResultSetMapping();
@@ -125,6 +124,22 @@ class ProductRepository extends ServiceEntityRepository
         //mapowanie
         return $query->getResult();
 
+    }
+
+    public function sqlTest(string $category): Product
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = '
+            SELECT id, name, category, description, puschare_price as puscharePrice, selling_price as sellingPrice, puschare_at as puschareAt 
+            FROM product p
+            WHERE p.category = :category
+            ORDER BY p.name ASC
+            limit 1';
+
+        $resultSet = $conn->executeQuery($sql, ['category' => $category]);
+
+        return new Product(...$resultSet->fetchAllAssociative());
     }
 
 
