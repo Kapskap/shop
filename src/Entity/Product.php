@@ -24,13 +24,20 @@ class Product
     private ?string $description = null;
 
     #[ORM\Column(nullable: true)]
-    private ?int $puscharePrice = null;
+    private ?int $purchasePrice = null;
 
     #[ORM\Column]
     private ?int $sellingPrice = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $puschareAt = null;
+    private ?\DateTimeImmutable $purchaseAt = null;
+
+    public function setId(int $id): static
+    {
+        $this->id = $id;
+
+        return $this;
+    }
 
     public function getId(): ?int
     {
@@ -73,14 +80,14 @@ class Product
         return $this;
     }
 
-    public function getPuscharePrice(): ?int
+    public function getPurchasePrice(): ?int
     {
-        return $this->puscharePrice;
+        return $this->purchasePrice;
     }
 
-    public function setPuscharePrice(?int $puscharePrice): static
+    public function setPurchasePrice(?int $purchasePrice): static
     {
-        $this->puscharePrice = $puscharePrice;
+        $this->purchasePrice = $purchasePrice;
 
         return $this;
     }
@@ -97,14 +104,14 @@ class Product
         return $this;
     }
 
-    public function getPuschareAt(): ?\DateTimeImmutable
+    public function getPurchaseAt(): ?\DateTimeImmutable
     {
-        return $this->puschareAt;
+        return $this->purchaseAt;
     }
 
-    public function setPuschareAt(\DateTimeImmutable $puschareAt): static
+    public function setPurchaseAt(\DateTimeImmutable $purchaseAt): static
     {
-        $this->puschareAt = $puschareAt;
+        $this->purchaseAt = $purchaseAt;
 
         return $this;
     }

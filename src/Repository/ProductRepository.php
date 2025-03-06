@@ -3,12 +3,15 @@
 namespace App\Repository;
 
 use App\Entity\Product;
+use App\Model\ProductsStat;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Query\Parameter;
+use Monolog\DateTimeImmutable;
+
 
 use Doctrine\ORM\Query\ResultSetMapping;
 
@@ -126,30 +129,49 @@ class ProductRepository extends ServiceEntityRepository
 
     }
 
-    public function sqlTest(string $category): Product
+    public function sqlTest(string $category): array
     {
         $conn = $this->getEntityManager()->getConnection();
 
         $sql = '
-            SELECT id, name, category, description, puschare_price as puscharePrice, selling_price as sellingPrice, puschare_at as puschareAt 
+            SELECT id, name, category, description, purchase_price as purchasePrice, selling_price as sellingPrice, purchase_at as purchaseAt 
             FROM product p
             WHERE p.category = :category
             ORDER BY p.name ASC
-            limit 1';
+            ';
 
         $resultSet = $conn->executeQuery($sql, ['category' => $category]);
+        $array = $resultSet->fetchAllAssociative();
 
-        return new Product(...$resultSet->fetchAllAssociative());
+        //przekształcanie danych na tablicę obiektów
+
+        $products = [];
+
+        foreach ($array as $key => $row) {
+            $product = new Product();
+            $product->setId($row['id']);
+            $product->setName($row['name']);
+            $product->setCategory($row['category']);
+            $product->setDescription($row['description']);
+            $product->setPurchasePrice($row['purchasePrice']);
+            $product->setSellingPrice($row['sellingPrice']);
+            $product->setPurchaseAt(DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $row['purchaseAt']));
+            $products[] = $product;
+        }
+
+//        foreach ($array as $key => $row) {
+//                $products[] = new ProductsStat(
+//                    $row['id'],
+//                    $row['name'],
+//                    $row['category'],
+//                    $row['description'],
+//                    $row['purchasePrice'],
+//                    $row['sellingPrice'],
+//                    $row['purchaseAt']
+//                    );
+//        }
+
+        return $products;
     }
 
-
-    //    public function findOneBySomeField($value): ?Product
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
 }
