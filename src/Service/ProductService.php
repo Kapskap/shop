@@ -2,12 +2,12 @@
 
 namespace App\Service;
 
-use App\Repository\ProductRepository;
-use App\Entity\Product;
+use App\Repository\ProductsRepository;
+use App\Entity\Products;
 
 Class ProductService
 {
-    public function __construct(private ProductRepository $productRepository)
+    public function __construct(private ProductsRepository $productRepository)
     {
         $this->productRepository = $productRepository;
     }

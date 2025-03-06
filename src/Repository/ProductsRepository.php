@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Product;
+use App\Entity\Products;
 use App\Model\ProductsStat;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -16,13 +16,13 @@ use Monolog\DateTimeImmutable;
 use Doctrine\ORM\Query\ResultSetMapping;
 
 /**
- * @extends ServiceEntityRepository<Product>
+ * @extends ServiceEntityRepository<Products>
  */
-class ProductRepository extends ServiceEntityRepository
+class ProductsRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Product::class);
+        parent::__construct($registry, Products::class);
     }
 
     public function findAllProductPages(): Pagerfanta
@@ -98,7 +98,7 @@ class ProductRepository extends ServiceEntityRepository
             $search = "%";
         }
 
-        $sql = 'SELECT p FROM App\Entity\Product p 
+        $sql = 'SELECT p FROM App\Entity\Products p 
                 WHERE (p.name LIKE :search
                 OR p.description LIKE :search
                 OR p.sellingPrice LIKE :search)
@@ -121,7 +121,7 @@ class ProductRepository extends ServiceEntityRepository
     {
         $em = $this->getEntityManager();
         $rsm = new ResultSetMapping();
-        $query = $em->createNativeQuery('SELECT * FROM product p WHERE category = ? ORDER BY p.selling_price ASC', $rsm);
+        $query = $em->createNativeQuery('SELECT * FROM products p WHERE category = ? ORDER BY p.selling_price ASC', $rsm);
 
         $query->setParameter(1, 'Drukarka');
         //mapowanie
@@ -135,7 +135,7 @@ class ProductRepository extends ServiceEntityRepository
 
         $sql = '
             SELECT id, name, category, description, purchase_price as purchasePrice, selling_price as sellingPrice, purchase_at as purchaseAt 
-            FROM product p
+            FROM products p
             WHERE p.category = :category
             ORDER BY p.name ASC
             ';
@@ -148,7 +148,7 @@ class ProductRepository extends ServiceEntityRepository
         $products = [];
 
         foreach ($array as $key => $row) {
-            $product = new Product();
+            $product = new Products();
             $product->setId($row['id']);
             $product->setName($row['name']);
             $product->setCategory($row['category']);

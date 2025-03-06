@@ -2,13 +2,13 @@
 
 namespace App\Factory;
 
-use App\Entity\Product;
+use App\Entity\Products;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
 /**
- * @extends PersistentProxyObjectFactory<Product>
+ * @extends PersistentProxyObjectFactory<Products>
  */
-final class ProductFactory extends PersistentProxyObjectFactory
+final class ProductsFactory extends PersistentProxyObjectFactory
 {
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
@@ -21,7 +21,7 @@ final class ProductFactory extends PersistentProxyObjectFactory
 
     public static function class(): string
     {
-        return Product::class;
+        return Products::class;
     }
 
     /**
@@ -35,9 +35,9 @@ final class ProductFactory extends PersistentProxyObjectFactory
             'name' => self::faker()->text(20),
             'category' => self::faker()->text(20),
             'description' => self::faker()->text(100),
-            'puscharePrice' => self::faker()->randomNumber(),
+            'purchasePrice' => self::faker()->randomNumber(),
             'sellingPrice' => self::faker()->randomNumber(),
-            'puschareAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
+            'purchaseAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
 
         ];
     }
