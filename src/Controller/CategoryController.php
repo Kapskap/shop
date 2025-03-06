@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Product;
+use App\Entity\Products;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,10 +26,10 @@ class CategoryController extends AbstractController
             $search = $form->get('search')->getData();
             $category = $form->get('category')->getData();
 
-            $products = $entityManager->getRepository(Product::class)->findAllSearchedAndSort($sort, $search, $category);
+            $products = $entityManager->getRepository(Products::class)->findAllSearchedAndSort($sort, $search, $category);
         }
         else {
-            $products = $entityManager->getRepository(Product::class)->findBy(['category' => $category]);
+            $products = $entityManager->getRepository(Products::class)->findBy(['category' => $category]);
         }
 
         if ($category == NULL) {

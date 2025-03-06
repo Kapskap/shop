@@ -8,15 +8,15 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use App\Repository\ProductRepository;
+use App\Repository\ProductsRepository;
 use App\Service\ProductService;
 
 
 class SortAndSearchFormType extends AbstractType
 {
     public function __construct(
-        private ProductRepository $productRepository,
-        private ProductService $productService
+        private ProductsRepository $productRepository,
+        private ProductService     $productService
     )
     {
         $this->ProductRepository = $productRepository;
