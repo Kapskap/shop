@@ -17,9 +17,6 @@ class Products
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 150, nullable: true)]
-    private ?string $category = null;
-
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
@@ -31,6 +28,10 @@ class Products
 
     #[ORM\Column]
     private ?\DateTimeImmutable $purchaseAt = null;
+
+    #[ORM\ManyToOne(inversedBy: 'products')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Categories $category = null;
 
     public function setId(int $id): static
     {
@@ -55,19 +56,7 @@ class Products
 
         return $this;
     }
-
-    public function getCategory(): ?string
-    {
-        return $this->category;
-    }
-
-    public function setCategory(?string $category): static
-    {
-        $this->category = $category;
-
-        return $this;
-    }
-
+    
     public function getDescription(): ?string
     {
         return $this->description;
@@ -112,6 +101,18 @@ class Products
     public function setPurchaseAt(\DateTimeImmutable $purchaseAt): static
     {
         $this->purchaseAt = $purchaseAt;
+
+        return $this;
+    }
+
+    public function getCategory(): ?Categories
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Categories $category): static
+    {
+        $this->category = $category;
 
         return $this;
     }
