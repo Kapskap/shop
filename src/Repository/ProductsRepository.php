@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Products;
+use App\Entity\Categories;
 use App\Model\ProductsStat;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -98,11 +99,12 @@ class ProductsRepository extends ServiceEntityRepository
             $search = "%";
         }
 
-        $sql = 'SELECT p FROM App\Entity\Products p 
+        $sql = 'SELECT p, c FROM App\Entity\Products p 
+                JOIN App\Entity\Categories c
                 WHERE (p.name LIKE :search
                 OR p.description LIKE :search
                 OR p.sellingPrice LIKE :search)
-                AND p.category LIKE :category'
+                AND c.id LIKE :category'
             .$orderBy;
 
         $query = $entityManager->createQuery($sql)->setParameters(
@@ -111,36 +113,23 @@ class ProductsRepository extends ServiceEntityRepository
                 new Parameter('category', $category)
             ])
         );
-
+dd($query->getResult());
         return $query->getResult();
 
     }
-
-    //nativeQuery
-    public function nativeTest($category): array
-    {
-        $em = $this->getEntityManager();
-        $rsm = new ResultSetMapping();
-        $query = $em->createNativeQuery('SELECT * FROM products p WHERE category = ? ORDER BY p.selling_price ASC', $rsm);
-
-        $query->setParameter(1, 'Drukarka');
-        //mapowanie
-        return $query->getResult();
-
-    }
-
+    
     public function sqlTest(string $category): array
     {
         $conn = $this->getEntityManager()->getConnection();
 
         $sql = '
-            SELECT id, name, category, description, purchase_price as purchasePrice, selling_price as sellingPrice, purchase_at as purchaseAt 
+            SELECT id, name, category_id, description, purchase_price as purchasePrice, selling_price as sellingPrice, purchase_at as purchaseAt 
             FROM products p
-            WHERE p.category = :category
+            WHERE p.category_id = :category
             ORDER BY p.name ASC
             ';
 
-        $resultSet = $conn->executeQuery($sql, ['category' => $category]);
+        $resultSet = $conn->executeQuery($sql, ['category_id' => $category]);
         $array = $resultSet->fetchAllAssociative();
 
         //przekształcanie danych na tablicę obiektów
@@ -151,7 +140,7 @@ class ProductsRepository extends ServiceEntityRepository
             $product = new Products();
             $product->setId($row['id']);
             $product->setName($row['name']);
-            $product->setCategory($row['category']);
+            $product->setCategory($row['category_id']);
             $product->setDescription($row['description']);
             $product->setPurchasePrice($row['purchasePrice']);
             $product->setSellingPrice($row['sellingPrice']);

@@ -8,18 +8,18 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use App\Repository\ProductsRepository;
-use App\Service\ProductService;
+use App\Repository\CategoriesRepository;
+use App\Service\CategoryService;
 
 
 class SortAndSearchFormType extends AbstractType
 {
     public function __construct(
-        private ProductsRepository $productRepository,
-        private ProductService     $productService
+        private CategoriesRepository $categoriesRepository,
+        private CategoryService $categoryService
     )
     {
-        $this->ProductRepository = $productRepository;
+        $this->CategoriesRepository = $categoriesRepository;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -41,7 +41,7 @@ class SortAndSearchFormType extends AbstractType
             'Nazwa Z-A' => 'name-desc'
         );
 
-        $category = array('Wszystko' => '%') + $this->productService->getProductCategory();
+        $category = array('Wszystko' => '%') + $this->categoryService->getNameAndIdCategory();
 
         $builder
             ->add('sort', ChoiceType::class, [
