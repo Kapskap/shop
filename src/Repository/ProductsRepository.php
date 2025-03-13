@@ -4,7 +4,6 @@ namespace App\Repository;
 
 use App\Entity\Products;
 use App\Entity\Categories;
-use App\Model\ProductsStat;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
@@ -12,9 +11,6 @@ use Pagerfanta\Pagerfanta;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Query\Parameter;
 use Monolog\DateTimeImmutable;
-
-
-use Doctrine\ORM\Query\ResultSetMapping;
 
 /**
  * @extends ServiceEntityRepository<Products>
@@ -80,7 +76,7 @@ class ProductsRepository extends ServiceEntityRepository
             ;
     }
 
-    public function findAllSearchedAndSort($sort, $search, $category): array
+    public function findAllSearchedAndSortDQL($sort, $search, $category): array
     {
         $entityManager = $this->getEntityManager();
 
@@ -113,23 +109,41 @@ class ProductsRepository extends ServiceEntityRepository
                 new Parameter('category', $category)
             ])
         );
-dd($query->getResult());
         return $query->getResult();
 
     }
     
-    public function sqlTest(string $category): array
+    public function findAllSearchedAndSort($sort, $search, $category): array
     {
+        if ($sort != NULL){
+            $sort = explode('-',$sort);
+            $orderBy = " ORDER BY p.$sort[0] $sort[1]";
+        }
+        else{
+            $orderBy = "";
+        }
+
+        if ($search != NULL){
+            $search="%".$search."%";
+        }
+        else {
+            $search = "%";
+        }
+
         $conn = $this->getEntityManager()->getConnection();
 
         $sql = '
-            SELECT id, name, category_id, description, purchase_price as purchasePrice, selling_price as sellingPrice, purchase_at as purchaseAt 
-            FROM products p
+            SELECT p.id, p.name as name, category_id, description, purchase_price as purchasePrice, 
+                   selling_price as sellingPrice, purchase_at as purchaseAt, c.name as category, c.parent_id 
+            FROM products p JOIN categories c
+            ON p.category_id = c.id
             WHERE p.category_id = :category
-            ORDER BY p.name ASC
-            ';
+            AND (p.name LIKE :search
+                OR p.description LIKE :search
+                OR p.selling_price LIKE :search)
+            '.$orderBy;
 
-        $resultSet = $conn->executeQuery($sql, ['category_id' => $category]);
+        $resultSet = $conn->executeQuery($sql, ['category' => $category, 'search' => $search]);
         $array = $resultSet->fetchAllAssociative();
 
         //przekształcanie danych na tablicę obiektów
@@ -137,28 +151,21 @@ dd($query->getResult());
         $products = [];
 
         foreach ($array as $key => $row) {
+            $category = new Categories();
+            $category->setId($row['category_id']);
+            $category->setName($row['category']);
+            $category->setParentId($row['parent_id']);
+
             $product = new Products();
             $product->setId($row['id']);
             $product->setName($row['name']);
-            $product->setCategory($row['category_id']);
+            $product->setCategory($category);
             $product->setDescription($row['description']);
             $product->setPurchasePrice($row['purchasePrice']);
             $product->setSellingPrice($row['sellingPrice']);
             $product->setPurchaseAt(DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $row['purchaseAt']));
             $products[] = $product;
         }
-
-//        foreach ($array as $key => $row) {
-//                $products[] = new ProductsStat(
-//                    $row['id'],
-//                    $row['name'],
-//                    $row['category'],
-//                    $row['description'],
-//                    $row['purchasePrice'],
-//                    $row['sellingPrice'],
-//                    $row['purchaseAt']
-//                    );
-//        }
 
         return $products;
     }
