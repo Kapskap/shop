@@ -22,6 +22,7 @@ class ProductsRepository extends ServiceEntityRepository
         parent::__construct($registry, Products::class);
     }
 
+
     public function findAllProductPages(): Pagerfanta
     {
         $query = $this->createQueryBuilder('p')
@@ -76,6 +77,21 @@ class ProductsRepository extends ServiceEntityRepository
             ;
     }
 
+    /**
+     * @return Products[]
+     */
+    public  function findDQL($sort, $search, $category): array
+    {
+        return $this->createQueryBuilder('products')
+            ->leftJoin('products.category', 'categories')
+            ->andWhere('products.name LIKE :search OR products.description LIKE :search OR products.sellingPrice LIKE :search')
+            ->andWhere('categories.id LIKE :category')
+            ->setParameter('search', '%'.$search.'%')
+            ->setParameter('category', $category)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function findAllSearchedAndSortDQL($sort, $search, $category): array
     {
         $entityManager = $this->getEntityManager();
@@ -124,7 +140,7 @@ class ProductsRepository extends ServiceEntityRepository
         }
 
         if ($search != NULL){
-            $search="%".$search."%";
+            $search = "%".$search."%";
         }
         else {
             $search = "%";
@@ -137,7 +153,7 @@ class ProductsRepository extends ServiceEntityRepository
                    selling_price as sellingPrice, purchase_at as purchaseAt, c.name as category, c.parent_id 
             FROM products p JOIN categories c
             ON p.category_id = c.id
-            WHERE p.category_id = :category
+            WHERE p.category_id LIKE :category
             AND (p.name LIKE :search
                 OR p.description LIKE :search
                 OR p.selling_price LIKE :search)

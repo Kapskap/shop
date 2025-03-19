@@ -27,7 +27,7 @@ class ProductsController extends AbstractController
             $category = $form->get('category')->getData();
 
             $products = $entityManager->getRepository(Products::class)->findAllSearchedAndSort($sort, $search, $category);
-//            $products2 = $entityManager->getRepository(Products::class)->sqlTest($sort, $search, $category);
+//            $products2 = $entityManager->getRepository(Products::class)->findDQL($sort, $search, $category);
 //            dd($products, $products2);
         }
         else {
