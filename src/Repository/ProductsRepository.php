@@ -22,7 +22,6 @@ class ProductsRepository extends ServiceEntityRepository
         parent::__construct($registry, Products::class);
     }
 
-
     public function findAllProductPages(): Pagerfanta
     {
         $query = $this->createQueryBuilder('p')
@@ -77,9 +76,6 @@ class ProductsRepository extends ServiceEntityRepository
             ;
     }
 
-    /**
-     * @return Products[]
-     */
     public  function findDQL($sort, $search, $category): array
     {
         return $this->createQueryBuilder('products')
@@ -92,7 +88,7 @@ class ProductsRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findAllSearchedAndSortDQL($sort, $search, $category): array
+    public function findQueryDQL($sort, $search, $category): array
     {
         $entityManager = $this->getEntityManager();
 
@@ -112,7 +108,7 @@ class ProductsRepository extends ServiceEntityRepository
         }
 
         $sql = 'SELECT p, c FROM App\Entity\Products p 
-                JOIN App\Entity\Categories c
+                JOIN p.category c
                 WHERE (p.name LIKE :search
                 OR p.description LIKE :search
                 OR p.sellingPrice LIKE :search)
@@ -140,7 +136,7 @@ class ProductsRepository extends ServiceEntityRepository
         }
 
         if ($search != NULL){
-            $search = "%".$search."%";
+            $search="%".$search."%";
         }
         else {
             $search = "%";
