@@ -18,14 +18,15 @@ class Category
     #[ORM\Column(length: 50)]
     private ?string $name = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $parentId = null;
-
     /**
      * @var Collection<int, Product>
      */
     #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'category')]
     private Collection $product;
+
+    #[ORM\ManyToOne(inversedBy: 'category')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Category $parent = null;
 
     public function __construct()
     {
@@ -56,14 +57,14 @@ class Category
         return $this;
     }
 
-    public function getParentId(): ?int
+    public function getParent(): ?Category
     {
-        return $this->parentId;
+        return $this->parent;
     }
 
-    public function setParentId(?int $parentId): static
+    public function setParent(?Category $parent): static
     {
-        $this->parentId = $parentId;
+        $this->parent = $parent;
 
         return $this;
     }
