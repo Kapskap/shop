@@ -2,8 +2,8 @@
 
 namespace App\Repository;
 
-use App\Entity\Products;
-use App\Entity\Categories;
+use App\Entity\Product;
+use App\Entity\Category;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
@@ -13,13 +13,13 @@ use Doctrine\ORM\Query\Parameter;
 use Monolog\DateTimeImmutable;
 
 /**
- * @extends ServiceEntityRepository<Products>
+ * @extends ServiceEntityRepository<Product>
  */
-class ProductsRepository extends ServiceEntityRepository
+class ProductRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Products::class);
+        parent::__construct($registry, Product::class);
     }
 
     public function findAllProductPages(): Pagerfanta
@@ -78,10 +78,10 @@ class ProductsRepository extends ServiceEntityRepository
 
     public  function findDQL($sort, $search, $category): array
     {
-        return $this->createQueryBuilder('products')
-            ->leftJoin('products.category', 'categories')
-            ->andWhere('products.name LIKE :search OR products.description LIKE :search OR products.sellingPrice LIKE :search')
-            ->andWhere('categories.id LIKE :category')
+        return $this->createQueryBuilder('product')
+            ->leftJoin('product.category', 'category')
+            ->andWhere('product.name LIKE :search OR product.description LIKE :search OR product.sellingPrice LIKE :search')
+            ->andWhere('category.id LIKE :category')
             ->setParameter('search', '%'.$search.'%')
             ->setParameter('category', $category)
             ->getQuery()
@@ -107,7 +107,7 @@ class ProductsRepository extends ServiceEntityRepository
             $search = "%";
         }
 
-        $sql = 'SELECT p, c FROM App\Entity\Products p 
+        $sql = 'SELECT p, c FROM App\Entity\Product p 
                 JOIN p.category c
                 WHERE (p.name LIKE :search
                 OR p.description LIKE :search
@@ -147,7 +147,7 @@ class ProductsRepository extends ServiceEntityRepository
         $sql = '
             SELECT p.id, p.name as name, category_id, description, purchase_price as purchasePrice, 
                    selling_price as sellingPrice, purchase_at as purchaseAt, c.name as category, c.parent_id 
-            FROM products p JOIN categories c
+            FROM product p JOIN category c
             ON p.category_id = c.id
             WHERE p.category_id LIKE :category
             AND (p.name LIKE :search
@@ -163,12 +163,12 @@ class ProductsRepository extends ServiceEntityRepository
         $products = [];
 
         foreach ($array as $key => $row) {
-            $category = new Categories();
+            $category = new Category();
             $category->setId($row['category_id']);
             $category->setName($row['category']);
             $category->setParentId($row['parent_id']);
 
-            $product = new Products();
+            $product = new Product();
             $product->setId($row['id']);
             $product->setName($row['name']);
             $product->setCategory($category);

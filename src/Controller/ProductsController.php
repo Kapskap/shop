@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Products;
+use App\Entity\Product;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,14 +26,14 @@ class ProductsController extends AbstractController
             $search = $form->get('search')->getData();
             $category = $form->get('category')->getData();
 
-            $products = $entityManager->getRepository(Products::class)->findAllSearchedAndSort($sort, $search, $category);
-//            $products2 = $entityManager->getRepository(Products::class)->findDQL($sort, $search, $category);
-//            $products3 = $entityManager->getRepository(Products::class)->findQueryDQL($sort, $search, $category);
+            $products = $entityManager->getRepository(Product::class)->findAllSearchedAndSort($sort, $search, $category);
+//            $products2 = $entityManager->getRepository(Product::class)->findDQL($sort, $search, $category);
+//            $products3 = $entityManager->getRepository(Product::class)->findQueryDQL($sort, $search, $category);
 //
 //            dd($products, $products2, $products3);
         }
         else {
-            $repository = $entityManager->getRepository(Products::class);
+            $repository = $entityManager->getRepository(Product::class);
             $products = $repository->findAll();
         }
 

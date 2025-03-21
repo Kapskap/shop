@@ -3,7 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Customer;
-use App\Entity\Products;
+use App\Entity\Product;
 use App\Factory\CustomerFactory;
 use App\Factory\ProductsFactory;
 use Doctrine\Bundle\FixturesBundle\Fixture;

@@ -2,11 +2,11 @@
 
 namespace App\Factory;
 
-use App\Entity\Products;
+use App\Entity\Product;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
 /**
- * @extends PersistentProxyObjectFactory<Products>
+ * @extends PersistentProxyObjectFactory<Product>
  */
 final class ProductsFactory extends PersistentProxyObjectFactory
 {
@@ -21,7 +21,7 @@ final class ProductsFactory extends PersistentProxyObjectFactory
 
     public static function class(): string
     {
-        return Products::class;
+        return Product::class;
     }
 
     /**

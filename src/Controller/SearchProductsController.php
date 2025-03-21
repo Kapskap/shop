@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Products;
+use App\Entity\Product;
 use App\Form\SortAndSearchFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,13 +24,13 @@ class SearchProductsController extends AbstractController
             $search = $form->get('search')->getData();
             $category = $form->get('category')->getData();
 
-            $products = $entityManager->getRepository(Products::class)->findAllSearchedAndSort($sort, $search, $category);
-            $products2 = $entityManager->getRepository(Products::class)->nativeTest($category);
-            $products3 = $entityManager->getRepository(Products::class)->sqlTest($category);
+            $products = $entityManager->getRepository(Product::class)->findAllSearchedAndSort($sort, $search, $category);
+            $products2 = $entityManager->getRepository(Product::class)->nativeTest($category);
+            $products3 = $entityManager->getRepository(Product::class)->sqlTest($category);
             dd($products, $products2, $products3);
         }
         else {
-            $repository = $entityManager->getRepository(Products::class);
+            $repository = $entityManager->getRepository(Product::class);
             $products = $repository->findAll();
         }
 

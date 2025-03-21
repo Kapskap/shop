@@ -2,12 +2,12 @@
 
 namespace App\Service;
 
-use App\Repository\CategoriesRepository;
+use App\Repository\CategoryRepository;
 
 
 Class CategoryService
 {
-    public function __construct(private CategoriesRepository $categoriesRepository)
+    public function __construct(private CategoryRepository $categoriesRepository)
     {
         $this->categoriesRepository = $categoriesRepository;
     }
