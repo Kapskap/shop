@@ -166,7 +166,7 @@ class ProductRepository extends ServiceEntityRepository
             $category = new Category();
             $category->setId($row['category_id']);
             $category->setName($row['category']);
-            $category->setParentId($row['parent_id']);
+            $category->setParent($category);
 
             $product = new Product();
             $product->setId($row['id']);
