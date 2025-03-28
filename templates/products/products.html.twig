@@ -1,12 +1,25 @@
 {% extends 'base.html.twig' %}
 {% block title %}Produkty{% endblock %}
 {% block body %}
-    <main>
+    <main>Kategoria:
+        {%  if previous is defined %}
+            <b>{{ previous.name }}</b>
+            {%  if  previous.parent.id != previous.id  %}
+                <a href="{{ path('products_category', { parent: previous.parent.id }) }}"> wstecz </a>
+            {% else %}
+                <a href="{{ path('products_show') }}">wstecz</a>
+            {% endif %}
+        {%  endif %}
+        <br>
+        {% for category in categories %}
+            <a href="{{ path('products_category', { parent: category.id }) }}"> {{ category.name }}, </a>
+        {% endfor %}
 {#
             {{ render(controller(
                 'App\\Controller\\SearchProductsController::SortAndSearch', {}
             )) }}
 #}
+        <br><br>
         {{ include('form/_SortAndSearch.html.twig') }}
 
         <section class="products">
