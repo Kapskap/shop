@@ -51,6 +51,37 @@ class CategoryRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
+    public function findSubcategoriesId($parent): array
+    {
+        $result = [];
+        $result[] = (int)$parent;
+        $level = 0;
+
+        $entityManager = $this->getEntityManager();
+
+        $sql = 'SELECT c.id FROM App\Entity\Category c 
+                WHERE c.parent = :parent
+                AND c.id != :parent
+                ORDER BY c.id ASC';
+
+        $query = $entityManager->createQuery($sql)
+            ->setParameter('parent', $result[$level]);
+
+        while( $level < count($result) ) {
+            $i = 0;
+            $query = $entityManager->createQuery($sql)
+                ->setParameter('parent', $result[$level]);
+
+            while ( isset($query->getResult()[$i]['id']) ) {
+                    $result[] = $query->getResult()[$i]['id'];
+                    $i++;
+            }
+            $level++;
+        }
+
+        return $result;
+    }
+
     //    /**
     //     * @return Categories[] Returns an array of Categories objects
     //     */

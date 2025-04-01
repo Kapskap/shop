@@ -8,19 +8,19 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use App\Repository\CategoryRepository;
-use App\Service\CategoryService;
+//use App\Repository\CategoryRepository;
+//use App\Service\CategoryService;
 
 
 class SortAndSearchFormType extends AbstractType
 {
-    public function __construct(
-        private CategoryRepository $categoriesRepository,
-        private CategoryService    $categoryService
-    )
-    {
-        $this->CategoriesRepository = $categoriesRepository;
-    }
+//    public function __construct(
+//        private CategoryRepository $categoriesRepository,
+//        private CategoryService    $categoryService
+//    )
+//    {
+//        $this->CategoriesRepository = $categoriesRepository;
+//    }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
@@ -35,23 +35,23 @@ class SortAndSearchFormType extends AbstractType
     {
         $sort = array(
             'Domyślnie' => null,
-            'Cena rosnąco' =>'sellingPrice-asc',
-            'Cena malejąco' =>'sellingPrice-desc',
+            'Cena rosnąco' =>'selling_price-asc',
+            'Cena malejąco' =>'selling_price-desc',
             'Nazwa A-Z' => 'name-asc',
             'Nazwa Z-A' => 'name-desc'
         );
 
-        $category = array('Wszystko' => '%') + $this->categoryService->getNameAndIdCategory();
+//        $category = array('Wszystko' => '%') + $this->categoryService->getNameAndIdCategory();
 
         $builder
             ->add('sort', ChoiceType::class, [
                 'label' => 'Sortuj według: ',
                 'choices'  => [$sort],
             ])
-            ->add('category', ChoiceType::class, [
-                'label' => 'Kategoria: ',
-                'choices'  => [$category],
-            ])
+//            ->add('category', ChoiceType::class, [
+//                'label' => 'Kategoria: ',
+//                'choices'  => [$category],
+//            ])
             ->add('search', TextType::class, [
                 'label' => 'Szukaj: ',
                 'required' => false,

@@ -24,8 +24,15 @@ class ProductsController extends AbstractController
         $form = $this->createForm(SortAndSearchFormType::class);
         $form->handleRequest($request);
 
-        $repository = $entityManager->getRepository(Product::class);
-        $products = $repository->findAll();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $sort = $form->get('sort')->getData();
+            $search = $form->get('search')->getData();
+            $products = $entityManager->getRepository(Product::class)->findAllSearchedAndSort($sort, $search, NULL);
+        }
+        else {
+            $repository = $entityManager->getRepository(Product::class);
+            $products = $repository->findAll();
+        }
 
         return $this->render('products/products.html.twig', [
             'products' => $products,
@@ -42,8 +49,8 @@ class ProductsController extends AbstractController
     ): Response
     {
         $previous = $entityManager->getRepository(Category::class)->findParent($parent);
-
         $category = $entityManager->getRepository(Category::class)->findChild($parent);
+        $subcategory = $entityManager->getRepository(Category::class)->findSubcategoriesId($parent);
 
         $form = $this->createForm(SortAndSearchFormType::class);
         $form->handleRequest($request);
@@ -51,17 +58,16 @@ class ProductsController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $sort = $form->get('sort')->getData();
             $search = $form->get('search')->getData();
-            $formCategory = $form->get('category')->getData();
+//            $formCategory = $form->get('category')->getData();
 
-            $products = $entityManager->getRepository(Product::class)->findAllSearchedAndSort($sort, $search, $formCategory);
+            $products = $entityManager->getRepository(Product::class)->findAllSearchedAndSort($sort, $search, $subcategory);
 //            $products2 = $entityManager->getRepository(Product::class)->findDQL($sort, $search, $category);
 //            $products3 = $entityManager->getRepository(Product::class)->findQueryDQL($sort, $search, $category);
 //
 //            dd($products, $products2, $products3);
         }
         else {
-            $repository = $entityManager->getRepository(Product::class);
-            $products = $repository->findAll();
+            $products = $entityManager->getRepository(Product::class)->findAllSearchedAndSort(NULL, NULL, $subcategory);
         }
 
         return $this->render('products/products.html.twig', [

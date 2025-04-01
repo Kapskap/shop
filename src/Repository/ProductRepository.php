@@ -112,7 +112,7 @@ class ProductRepository extends ServiceEntityRepository
                 WHERE (p.name LIKE :search
                 OR p.description LIKE :search
                 OR p.sellingPrice LIKE :search)
-                AND c.id LIKE :category'
+                AND c.id IN :category'
             .$orderBy;
 
         $query = $entityManager->createQuery($sql)->setParameters(
@@ -142,6 +142,13 @@ class ProductRepository extends ServiceEntityRepository
             $search = "%";
         }
 
+        if ($category != NULL) {
+            $category = '(' . implode(',', $category) . ')';
+        }
+        else{
+            $category = '( SELECT c.id FROM category c)';
+        }
+
         $conn = $this->getEntityManager()->getConnection();
 
         $sql = '
@@ -149,8 +156,8 @@ class ProductRepository extends ServiceEntityRepository
                    selling_price as sellingPrice, purchase_at as purchaseAt, c.name as category, c.parent_id 
             FROM product p JOIN category c
             ON p.category_id = c.id
-            WHERE p.category_id LIKE :category
-            AND (p.name LIKE :search
+            WHERE p.category_id IN '.$category.
+            'AND (p.name LIKE :search
                 OR p.description LIKE :search
                 OR p.selling_price LIKE :search)
             '.$orderBy;
